@@ -1,0 +1,1 @@
+zip -r release-data/albumin-diet-chrome-extension_v.zip . --exclude @release_exclude.lst

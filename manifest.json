@@ -1,0 +1,38 @@
+{
+    "name": "Albumin Diet",
+    "version": "0.1",
+    "description": "Lets you mark albums as listened",
+    "browser_action": {
+        "default_title": "Albumin Diet",
+        "default_icon": "imgs/icon_16.png",
+        "default_popup": "popup.html"
+    },
+    "icons": {
+        "16": "imgs/icon_16.png",
+        "48": "imgs/icon_48.png",
+        "128": "imgs/icon_128.png"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://www.albumoftheyear.org/*"
+            ],
+            "js": [
+                "libs/jquery-3.1.1.min.js",
+                "libs/lodash.min.js",
+                "inject.js"
+            ],
+            "css": [
+                "inject.css"
+            ],
+            "run_at": "document_end"
+        }
+    ],
+    "permissions": [
+        "tabs",
+        "storage",
+        "https://www.albumoftheyear.org/*"
+    ],
+    "web_accessible_resources": [],
+    "manifest_version": 2
+}
