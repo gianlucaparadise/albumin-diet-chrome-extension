@@ -4,13 +4,9 @@
 	left: 4px;
 	z-index: 48;
 	background-color: #424242;
-	width: 30px;
-	height: 30px;
-	
-	/* width: auto;
+	width: auto;
     height: auto;
-	padding: 9px 5px; */
-	
+	padding: 0px 5px;
 	border-radius: 20px;
 	box-shadow: 1px 2px 5px 2px #888888;
 	display: flex;
@@ -21,14 +17,14 @@
 
 .albuminIcon {
 	color: #cddc39;
-	/* margin: 0px 5px; */
+	padding: 5px;
 }
 
-.albuminContainer.selected .albuminIcon {
+.albuminContainer .albuminIcon.selected {
 	font-weight: 900 !important;
 }
 
-.albuminContainer.unselected .albuminIcon {
+.albuminContainer .albuminIcon.unselected {
 	font-weight: 100 !important;
 }
 
