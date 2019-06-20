@@ -5,19 +5,33 @@ var debug = true;
 
 log(() => "🥚 Albumin Diet 🎧 running");
 
-const albumCoverLinksSelectorGrid = '.albumBlock .image > a';
-const albumCoverLinksSelectorList = '.albumListCover > a';
+const albumCoverLinksSelectorGrid = '.albumBlock .image';
+const albumCoverLinksSelectorList = '.albumListCover';
+const albumCoverLinksSelectorDetail = '.albumTopBox.cover';
 const selectedClass = 'selected';
 const unselectedClass = 'unselected';
 const eggClass = 'albuminEgg';
 const albumClass = 'albuminAlbum';
 
-// First I need to understand if I'm parsing a list or a grid of albums
-const isInList = $('div.albumListRow:nth(1)').length > 0;
-const albumCoverLinksSelector = isInList ? albumCoverLinksSelectorList : albumCoverLinksSelectorGrid;
+// Here I collect all the album covers
+const elements = [];
 
-$(albumCoverLinksSelector).each((index, element) => {
-    const albumlink = $(element).attr('href');
+const albumsInGrid = $(albumCoverLinksSelectorGrid);
+log(() => `Found ${albumsInGrid.length} elements in a Grid`);
+elements.push(...albumsInGrid)
+
+const albumsInList = $(albumCoverLinksSelectorList);
+log(() => `Found ${albumsInList.length} elements in a List`);
+elements.push(...albumsInList);
+
+// Injection in album detail is different from injection in list/grid
+const albumsInDetail = $(albumCoverLinksSelectorDetail);
+log(() => `Found ${albumsInDetail.length} elements in a Detail`);
+elements.push(...albumsInDetail);
+
+// For each album cover, I add the buttons
+$(elements).each((index, element) => {
+    const albumlink = extractAlbumLink(element);
     const id = btoa(albumlink); // encoding in base64 to make sure I don't have strange characters
     chrome.storage.sync.get([id], function (result) {
 
@@ -35,9 +49,21 @@ $(albumCoverLinksSelector).each((index, element) => {
 
         toggleButton.data('albumHref', albumlink);
 
-        $(element).before(toggleButton);
+        // ToggleButton div has position absoulute. I need the parent to have position relative  
+        $(element).css('position', 'relative');
+        $(element).prepend(toggleButton);
     });
 });
+
+function extractAlbumLink(element) {
+    const linkElement = $(element).find('a');
+    if (linkElement && linkElement.length > 0) {
+        return linkElement.attr('href');
+    }
+
+    // If this element doesn't contain a link, I'm in the detail page and I use current page's link as album link
+    return window.location.pathname;
+}
 
 function onToggleSaveAlbumClick(event) {
     const $this = $(this);
