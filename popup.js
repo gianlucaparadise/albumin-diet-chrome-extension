@@ -10,9 +10,10 @@ chrome.storage.sync.get(null, function (result) {
 		const albumLink = atob(key);
 		const albumDescriptor = result[key];
 		if (albumDescriptor.egged) {
+			const albumName = albumDescriptor.albumName;
 			const link = document.createElement('a');
 			link.href = `${aotyBasePath}${albumLink}`;
-			link.textContent = `${albumLink}`;
+			link.textContent = `${albumName}`;
 			link.onclick = function () {
 				chrome.tabs.create({ active: true, url: link.href });
 			};

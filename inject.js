@@ -5,9 +5,14 @@ var debug = true;
 
 log(() => "🥚 Albumin Diet 🎧 running");
 
-const albumCoverLinksSelectorGrid = '.albumBlock .image';
-const albumCoverLinksSelectorList = '.albumListCover';
-const albumCoverLinksSelectorDetail = '.albumTopBox.cover';
+const albumCoverLinkGridClass = 'image';
+const albumCoverLinkListClass = 'albumListCover';
+const albumCoverLinkDetailClass = 'albumTopBox';
+
+const albumCoverLinksSelectorGrid = `.albumBlock .${albumCoverLinkGridClass}`;
+const albumCoverLinksSelectorList = `.${albumCoverLinkListClass}`;
+const albumCoverLinksSelectorDetail = `.${albumCoverLinkDetailClass}.cover`;
+
 const selectedClass = 'selected';
 const unselectedClass = 'unselected';
 const eggClass = 'albuminEgg';
@@ -47,6 +52,9 @@ $(elements).each((index, element) => {
 
         toggleButton.click(onToggleSaveAlbumClick);
 
+        const albumName = extractAlbumName(element);
+        log(() => `${albumName}`);
+        toggleButton.data('albumName', albumName);
         toggleButton.data('albumHref', albumlink);
 
         // ToggleButton div has position absoulute. I need the parent to have position relative  
@@ -65,16 +73,53 @@ function extractAlbumLink(element) {
     return window.location.pathname;
 }
 
+function extractAlbumName(element) {
+    const $element = $(element);
+
+    const isGrid = $element.hasClass(albumCoverLinkGridClass);
+    if (isGrid) {
+        const $parent = $element.parent();
+        const albumTitle = $parent.find('.albumTitle').text();
+        let artistTitle = $parent.find('.artistTitle').text();
+        if (!artistTitle) {
+            log(() => 'artist not found, trying to extract it from detail');
+            artistTitle = $('.artist span[itemprop="name"]').text();
+        }
+
+        return `${artistTitle} - ${albumTitle}`;
+    }
+
+    const isList = $element.hasClass(albumCoverLinkListClass);
+    if (isList) {
+        const artistAlbumTitle = $element.siblings('.albumListTitle').find('a').text();
+
+        return artistAlbumTitle;
+    }
+
+    const isDetail = $element.hasClass(albumCoverLinkDetailClass);
+    if (isDetail) {
+        const $parent = $element.parent();
+        const albumTitle = $parent.find('.albumTitle span[itemprop="name"]').text();
+        const artistTitle = $parent.find('.artist span[itemprop="name"]').text();
+
+        return `${artistTitle} - ${albumTitle}`;
+    }
+
+    return '';
+}
+
 function onToggleSaveAlbumClick(event) {
     const $this = $(this);
     const $target = $(event.target);
 
     const isSelected = $target.hasClass(selectedClass);
 
+    const albumName = $this.data('albumName');
     const albumlink = $this.data('albumHref');
     const id = btoa(albumlink); // encoding in base64 to make sure I don't have strange characters
 
     const albumDescriptor = {
+        albumName,
         lastModified: new Date().toISOString(),
         provider: 'aoty',
     };
