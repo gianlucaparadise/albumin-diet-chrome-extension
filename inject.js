@@ -57,7 +57,7 @@ $(elements).each((index, element) => {
         toggleButton.data('albumName', albumName);
         toggleButton.data('albumHref', albumlink);
 
-        // ToggleButton div has position absoulute. I need the parent to have position relative  
+        // ToggleButton div has position absolute. I need the parent to have position relative  
         $(element).css('position', 'relative');
         $(element).prepend(toggleButton);
     });
@@ -141,6 +141,7 @@ function onToggleSaveAlbumClick(event) {
         log(() => albumDescriptors);
 
         $target.toggleClass(`${selectedClass} ${unselectedClass}`);
+        $target.siblings(`.${selectedClass}`).toggleClass(`${selectedClass} ${unselectedClass}`);
     });
 }
 
