@@ -1,8 +1,23 @@
 body {
 	width: 600px;
-	height: 400px
+	min-height: 400px;
 }
 
 h1.title {
 	text-align: center;
+}
+
+li {
+	line-height: 1.3em;
+}
+
+li .button {
+	cursor: pointer;
+	padding: 0 0.5em;
+
+	display: none;
+}
+
+li:hover .button {
+	display: inline;
 }
