@@ -31,7 +31,6 @@
         }
     ],
     "permissions": [
-        "tabs",
         "storage",
         "https://www.albumoftheyear.org/*"
     ],
