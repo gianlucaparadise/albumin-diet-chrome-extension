@@ -1,6 +1,6 @@
 {
     "name": "Albumin Diet",
-    "version": "0.2",
+    "version": "0.3",
     "description": "Mark albums as listened or add them to a listening list",
     "action": {
         "default_title": "Albumin Diet",
